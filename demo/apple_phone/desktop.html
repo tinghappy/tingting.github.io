@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>仿苹果桌面拖拽效果</title>
+<style>
+*{margin:0; padding:0;list-style:none;}
+body{background:url("img/bg1.jpg") center top fixed;} 
+.box{width:224px; height:437px; background:url("img/phone.png") left top no-repeat; margin:50px auto;position:relative;}
+#ul1{width:194px; padding:70px 20px}
+#ul1 li{width:30px; height:30px; margin:10px 8px; float:left; text-align:center; line-height:100px; color:red;}
+#ul1 li img{width:100;height:100%;}
+#btn{position:absolute;left:85px;bottom:90px;}
+</style>
+<script src="move.js"></script>
+<script>
+window.onload=function(){
+	var oUl =document.getElementById('ul1');
+	var oBtn=document.getElementById('btn');
+	var aLi = oUl.children;
+	var zIndex = 10;
+	var aPos = [];
+	for(var i=0;i<aLi.length;i++){
+		aPos.push({left:aLi[i].offsetLeft,top:aLi[i].offsetTop});
+	}
+	for(var i=0;i<aLi.length;i++){
+		aLi[i].style.left = aPos[i].left+'px';
+		aLi[i].style.top = aPos[i].top+'px';
+		aLi[i].style.position='absolute';
+		aLi[i].style.margin=0;
+	}
+	for(var i=0;i<aLi.length;i++){
+		drag(aLi[i]);
+		aLi[i].index=i;
+	}
+	
+	
+	oBtn.onclick=function(){
+		aPos.sort(function(){
+			return Math.random()-0.5;
+		});
+		for(var i=0;i<aLi.length;i++){
+			startMove(aLi[i],aPos[i]);
+			aLi[i].index = i;
+		}
+	};
+	function drag(obj){
+		obj.onmousedown=function(ev){
+			zIndex++;
+			obj.style.zIndex=zIndex;
+			var oEvent = ev||event;
+			var disX = oEvent.clientX-obj.offsetLeft;
+			var disY = oEvent.clientY-obj.offsetTop;
+			document.onmousemove=function(ev){
+				var oEvent = ev||event;
+				obj.style.left = oEvent.clientX-disX+'px';
+				obj.style.top = oEvent.clientY-disY+'px';
+			};
+			document.onmouseup=function(){
+				document.onmousemove=null;
+				document.onmouseup=null;
+				obj.releaseCapture&&obj.releaseCapture();
+				var oNear = findNearest(obj);
+				if(oNear){
+					startMove(obj,aPos[oNear.index]);
+					startMove(oNear,aPos[obj.index]);
+					var car;
+					car = obj.index;
+					obj.index = oNear.index;
+					oNear.index = car;
+				}else{
+					obj.style.left = aPos[obj.index].left+'px';
+					obj.style.top = aPos[obj.index].top+'px';
+				}
+			};
+			obj.setCapture&&obj.setCapture();
+			return false;
+		};
+	}
+	function findNearest(obj){
+		var iMin = new Date().getTime();
+		var iMinIndex = -1;
+		for(var i=0;i<aLi.length;i++){
+			if(obj==aLi[i])continue;
+			if(callTest(obj,aLi[i])){
+				if(iMin>getDis(obj,aLi[i])){
+					iMin = getDis(obj,aLi[i]);
+					iMinIndex = i;
+				}
+			}
+		}
+		if(iMinIndex==-1){
+			return null;
+		}else{
+			return aLi[iMinIndex];
+		}
+	}
+
+	function callTest(obj,obj2){
+		var l1 = obj.offsetLeft;
+		var t1 = obj.offsetTop;
+		var r1 = obj.offsetLeft+obj.offsetWidth;
+		var b1 = obj.offsetTop+obj.offsetHeight;
+		var l2 = obj2.offsetLeft;
+		var t2 = obj2.offsetTop;
+		var r2 = obj2.offsetLeft+obj2.offsetWidth;
+		var b2 = obj2.offsetTop+obj2.offsetHeight;
+		if(r1<l2||b1<t2||l1>r2||t1>b2){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	function getDis(obj,obj2){
+		var l1 = obj.offsetLeft+obj.offsetWidth/2;
+		var l2 = obj2.offsetLeft+obj2.offsetWidth/2;
+		var t1 = obj.offsetTop+obj.offsetHeight/2;
+		var t2 = obj2.offsetTop+obj2.offsetHeight/2;
+		var a = l2-l1;
+		var b = t2-t1;
+		return Math.sqrt(Math.pow(a,2)+Math.pow(b,2));
+	}
+};
+</script>
+</head>
+<body>
+<div class="box">
+    <ul id="ul1">
+    	<li><img src="img/1.png"/></li>
+        <li><img src="img/2.png" /></li>
+        <li><img src="img/3.png" /></li>
+        <li><img src="img/4.png" /></li>
+        <li><img src="img/5.png" /></li>
+        <li><img src="img/6.png" /></li>
+        <li><img src="img/7.png" /></li>
+        <li><img src="img/8.png" /></li>
+        <li><img src="img/9.png" /></li>
+        <li><img src="img/10.png" /></li>
+        <li><img src="img/11.png" /></li>
+        <li><img src="img/12.png" /></li>
+        <li><img src="img/13.png" /></li>
+        <li><img src="img/14.png" /></li>
+        <li><img src="img/15.png" /></li>
+        <li><img src="img/16.png" /></li>
+    </ul>
+    <input type="button" value="换一换"  id="btn"/>
+</div>
+</body>
+</html>

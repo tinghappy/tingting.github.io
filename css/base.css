@@ -1,0 +1,19 @@
+@charset "utf-8";
+/* CSS Document */
+/*reset begin*/
+body,ol,p,ul,h1,h2,h3,h4,h5,h6,dd,dl,table,th,td,pre,form,select,textarea,input{padding:0;margin:0;}
+a{text-decoration:none;font-size:12px;}
+img{border:none;vertical-align:top;}
+textarea{resize:none;overflow:auto;}
+em{font-style:normal}
+li{list-style:none}
+.left{float:left;display:inline;}     /*兼容IE6*/
+.right{float:right;display:inline;}  /*兼容IE6*/
+input{ padding:0; border:none 0; outline:none; background:none;}
+table{ border-collapse:collapse;text-align:center; vertical-align:middle;}
+td,th{padding:0;}
+.clear{zoom:1;}
+.clear:after{display:block;content:"";clear:both;}
+/*reset end*/
+
+

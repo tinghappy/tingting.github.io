@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="author" content="智能社 - zhinengshe.com" />
+<meta name="copyright" content="智能社 - zhinengshe.com" />
+<meta name="description" content="智能社是一家专注于web前端开发技术的公司，目前主要提供JavaScript培训和HTML5培训两项服务，同时还推出了大量javascript基础知识教程，智能课堂为你带来全新的学习方法和快乐的学习体验。" />
+<title>智能社— http://www.zhinengshe.com</title>
+<style>
+*{ margin:0; padding:0; list-style:none;}
+body{text-align:center; background: #013;}
+body a{width: 100px; height: 30px; background: #f39c11; display: inline-block; color: #fff; line-height: 30px; text-decoration: none; margin-top: 35px; border-radius: 3px; font-size: 12px;}
+.box{width:380px; height:380px; margin:100px auto; position:relative; -webkit-transform-style:preserve-3d;}
+.box li{position:absolute; top:0; left:0; width:100%; height:100%; text-align:center; line-height:300px; background:#399; opacity:0; font-size:30px; border:1px solid #000; -webkit-transition:1s all ease;}
+.box .l2{opacity:0; -webkit-transform: perspective(800px) translate(-260px,0) rotateY(60deg);}
+.box .l1{opacity:0.75; -webkit-transform: perspective(800px) translate(-200px,0) rotateY(60deg);}
+.box .cur{opacity:1;}
+.box .r1{opacity:0.75; -webkit-transform: perspective(800px) translate(200px,0) rotateY(-60deg);}
+.box .r2{opacity:0; -webkit-transform: perspective(800px) translate(260px,0) rotateY(-60deg);}
+</style>
+<script>
+window.onload=function(){
+	var oPrev = document.querySelector('.prev');
+	var oNext = document.querySelector('.next');
+	var oBox = document.querySelector('.box');
+	var aLi = oBox.children;
+	
+	var aClass = [];
+	for(var i=0;i<aLi.length;i++){
+		aClass[i] = aLi[i].className;
+	}
+	//alert(aClass);
+	
+	var bOk = false;
+	
+	oNext.onclick=function(){
+		
+		if(bOk)return;
+		bOk = true;
+		aClass.unshift(aClass.pop());
+		tab();
+	};
+	oPrev.onclick=function(){
+		if(bOk)return;
+		bOk = true;
+		aClass.push(aClass.shift());
+		tab();
+	};
+	
+	function tab(){
+		for(var i=0;i<aLi.length;i++){
+			aLi[i].className=aClass[i];
+		}
+		var oCur = document.querySelector('.cur');
+		
+		function tranEnd(){
+			oCur.addEventListener('transitionend',tranEnd,false);
+			bOk = false;
+		}
+		oCur.addEventListener('transitionend',tranEnd,false);
+	}
+};
+</script>
+</head>
+
+<body>
+<a href="javascript:;" class="prev">上一个</a>
+<a href="javascript:;" class="next">下一个</a>
+<ul class="box">
+	<li class="cur"><img src="img/1.jpg"></li>
+	<li class="r1"><img src="img/6.jpg" alt=""></li>
+	<li class="r2"><img src="img/3.jpg"></li>
+	<li><img src="img/5.jpg"></li>
+	<li><img src="img/2.jpg"></li>
+	<li><img src="img/7.jpg"></li>
+	<li class="l2"><img src="img/8.jpg"></li>
+	<li class="l1"><img src="img/9.jpg"></li>
+</ul>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

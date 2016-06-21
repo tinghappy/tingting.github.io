@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>分块运动</title>
+<style>
+*{margin:0; padding:0;}
+body{width:100%;height:100%;background:url(img/bg.jpg) left center fixed}
+#box{width:700px; height:400px; background:url(img/0.jpg) no-repeat; margin:100px auto; position:relative; top:0; left:0;}
+#box span{background:url(img/0.jpg) no-repeat; opacity:0;}
+input{position:absolute;left:50%;top:50px;width:60px;height:30px;margin-left:-30px;font-size:16px;font-weight:bold;}
+</style>
+<script src="move.js"></script>
+<script>
+window.onload=function(){
+	var oBtn = document.getElementsByTagName('input')[0];
+	var oBox = document.getElementById('box');
+	var R = 4;
+	var C = 7;
+	for(var r = 0;r<R;r++){
+		for(var c = 0;c<C;c++){
+			var oS = document.createElement('span');
+			oS.style.width=oBox.offsetWidth/C+'px';
+			oS.style.height=oBox.offsetHeight/R+'px';
+			oBox.appendChild(oS);
+			oS.style.left = c*oBox.offsetWidth/C+'px';
+			oS.style.top = r*oBox.offsetHeight/R+'px';
+			oS.style.position='absolute';
+			oS.style.backgroundPosition=-c*oBox.offsetWidth/C+'px -'+r*oBox.offsetHeight/R+'px';
+		}
+	}
+	var timer = null;
+	var iNow = 0;
+	var bOk = false;
+	oBtn.onclick=function(){
+		if(bOk)return;
+		bOk=true;
+		var aS = oBox.children;
+		iNow++;
+		for(var i=0;i<aS.length;i++){
+			(function(index){
+				setTimeout(function(){
+					aS[index].style.backgroundImage='url(img/'+iNow%3+'.jpg)';
+					aS[index].style.opacity=0;
+					(function(j){
+						startMove(aS[j],{opacity:1},{end:function(){
+							if(j==aS.length-1){
+								oBox.style.background='url(img/'+iNow%3+'.jpg) no-repeat';
+								bOk=false;
+							}
+						}});
+					})(index);
+				},Math.random()*300);
+			})(i);
+		}
+	};
+};
+</script>
+</head>
+
+<body>
+<input type="button" value="切换" />
+<div id="box">
+	
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

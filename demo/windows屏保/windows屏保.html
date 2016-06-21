@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="author" content="智能社 - zhinengshe.com" />
+<meta name="copyright" content="智能社 - zhinengshe.com" />
+<meta name="description" content="智能社是一家专注于web前端开发技术的公司，目前主要提供JavaScript培训和HTML5培训两项服务，同时还推出了大量javascript基础知识教程，智能课堂为你带来全新的学习方法和快乐的学习体验。" />
+<title>智能社— http://www.zhinengshe.com</title>
+<style>
+*{margin:0; padding:0;}
+html,body{overflow:hidden;}
+body{background: #013;}
+</style>
+<script>
+function rnd(n,m){
+	return Math.floor(Math.random()*(m-n)+n);
+}
+window.onload=function(){
+	var oC = document.getElementById('c1');
+	var gd = oC.getContext('2d');
+	oC.width = document.documentElement.clientWidth;
+	oC.height = document.documentElement.clientHeight;
+	
+	//确定一下点的个数
+	var N = 10;
+	var aPoint = [];
+	//[{x,y,speedX,speedY},{}]
+	
+	var LEN = 10; 			//有几根线
+	var oldPoint = [];
+	/*
+		[
+			[{},{},{},{}],
+			[],
+			[]
+		]
+	*/
+	
+	for(var i = 0;i<N;i++){
+		aPoint.push({
+			x:rnd(0,oC.width),
+			y:rnd(0,oC.height),
+			speedX:rnd(-5,5),
+			speedY:rnd(-5,5)
+		});
+	}
+	
+	setInterval(function(){
+		
+		gd.clearRect(0,0,oC.width,oC.height);
+		
+		//改变位置
+		for(var i=0;i<aPoint.length;i++){
+			if(aPoint[i].x<0){
+				aPoint[i].x=0;
+				aPoint[i].speedX*=-1;
+			}
+			if(aPoint[i].y<0){
+				aPoint[i].y=0;
+				aPoint[i].speedY*=-1;
+			}
+			
+			if(aPoint[i].x>oC.width){
+				aPoint[i].x=oC.width;
+				aPoint[i].speedX*=-1;
+			}
+			
+			if(aPoint[i].y>oC.height){
+				aPoint[i].y=oC.height;
+				aPoint[i].speedY*=-1;
+			}
+			
+			
+			
+			aPoint[i].x+=aPoint[i].speedX;
+			aPoint[i].y+=aPoint[i].speedY;
+		}
+		
+		
+		//画点
+		for(var i=0;i<aPoint.length;i++){
+			drawPoint(aPoint[i]);
+		}
+		
+		
+		gd.moveTo(aPoint[0].x,aPoint[0].y);
+		for(var i=1;i<aPoint.length;i++){
+			gd.lineTo(aPoint[i].x,aPoint[i].y);
+		}
+		gd.closePath();
+		gd.strokeStyle = '#fff';
+		gd.stroke();
+		
+		
+		var arr = [];
+		for(var i=0;i<aPoint.length;i++){
+			arr.push({
+				x:aPoint[i].x,
+				y:aPoint[i].y,
+				speedX:aPoint[i].speedX,
+				speedY:aPoint[i].speedY
+			});
+		}
+		
+		oldPoint.push(arr);
+		
+		if(oldPoint.length>LEN){
+			oldPoint.shift();
+		}
+		
+		for(var i=0;i<oldPoint.length;i++){
+			var arr2 = oldPoint[i];
+			gd.beginPath();
+			gd.moveTo(arr2[0].x,arr2[0].y);
+			for(var j=1;j<arr2.length;j++){
+				gd.lineTo(arr2[j].x,arr2[j].y);
+			}
+			gd.closePath();
+			gd.strokeStyle = '#fff';
+			gd.stroke();
+		}
+		
+		
+		
+		
+		
+	},16);
+	
+	
+	
+	function drawPoint(oPoint){
+		gd.beginPath();
+		gd.rect(oPoint.x,oPoint.y,0,0);
+		gd.fillStyle = '#fff';
+		gd.fill();
+	}
+};
+</script>
+</head>
+
+<body>
+<canvas id="c1" >
+	<strong>您好，您的浏览器版本过低。请尽快升级。</strong>
+</canvas>
+</body>
+</html>
